@@ -4,8 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 public class TodoController {
 
@@ -28,13 +26,27 @@ public class TodoController {
         return "todo";
     }
 
-    @PutMapping("/todos/{todoId}/done")
-    public String setDone(@PathVariable Long todoId, @RequestParam Optional<String> done, Model model) {
-        return todoRepository.findById(todoId).map(it -> {
-            it.setDone(done.isPresent());
+    @GetMapping("/todos/{todoId}")
+    public String editTodo(Model model, @PathVariable Long todoId) {
+        final var todo = todoRepository.findById(todoId);
+        if (todo.isEmpty()) return "empty";
+
+        model.addAttribute("todo", todo.get());
+        return "editTodo";
+    }
+
+    @PutMapping("/todos/{todoId}")
+    public String saveTodo(@ModelAttribute Todo todo, Model model, @PathVariable Long todoId) {
+        final var old = todoRepository.findById(todoId);
+        if (old.isEmpty()) return "empty";
+
+        old.ifPresent(it -> {
+            it.setDone(todo.getDone());
+            it.setTask(todo.getTask());
             todoRepository.save(it);
             model.addAttribute("todo", it);
-            return "todo";
-        }).orElse("empty");
+        });
+
+        return "todo";
     }
 }
