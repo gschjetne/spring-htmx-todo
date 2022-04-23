@@ -1,5 +1,6 @@
 package se.schjetne.springhtmxtodo;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,5 +49,11 @@ public class TodoController {
         });
 
         return "todo";
+    }
+
+    @DeleteMapping("/todos/{todoId}")
+    public String deleteTodo(@PathVariable Long todoId) {
+        todoRepository.findById(todoId).ifPresent(todoRepository::delete);
+        return "empty";
     }
 }
