@@ -21,6 +21,7 @@ public class TodoController {
     }
 
     @PostMapping("/todos")
+    @ResponseStatus(HttpStatus.CREATED)
     public String createTodo(@ModelAttribute Todo todo, Model model) {
         todoRepository.save(todo);
         model.addAttribute("todo", todo);
