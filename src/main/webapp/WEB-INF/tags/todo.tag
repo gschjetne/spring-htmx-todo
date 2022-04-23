@@ -3,10 +3,20 @@
 <li>
     <c:choose>
         <c:when test="${item.done}">
-            <input type="checkbox" checked/>
+            <input type="checkbox"
+                   name="done"
+                   hx-put="todos/${item.id}/done"
+                   hx-target="closest li"
+                   hx-swap="outerHTML"
+                   hx-include="closest li" checked/>
         </c:when>
         <c:otherwise>
-            <input type="checkbox"/>
+            <input type="checkbox"
+                   name="done"
+                   hx-put="todos/${item.id}/done"
+                   hx-target="closest li"
+                   hx-swap="outerHTML"
+                   hx-include="closest li"/>
         </c:otherwise>
     </c:choose>
     <span class="${item.done ? "item-done" : ""}">${item.task}</span>

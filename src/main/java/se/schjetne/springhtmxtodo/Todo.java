@@ -40,6 +40,10 @@ public class Todo {
         this.task = task;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public OffsetDateTime getUpdated() {
         return updated;
     }

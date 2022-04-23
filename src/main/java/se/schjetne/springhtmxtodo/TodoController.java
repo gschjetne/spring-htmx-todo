@@ -2,9 +2,9 @@ package se.schjetne.springhtmxtodo;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 public class TodoController {
@@ -26,5 +26,15 @@ public class TodoController {
         todoRepository.save(todo);
         model.addAttribute("todo", todo);
         return "todo";
+    }
+
+    @PutMapping("/todos/{todoId}/done")
+    public String setDone(@PathVariable Long todoId, @RequestParam Optional<String> done, Model model) {
+        return todoRepository.findById(todoId).map(it -> {
+            it.setDone(done.isPresent());
+            todoRepository.save(it);
+            model.addAttribute("todo", it);
+            return "todo";
+        }).orElse("empty");
     }
 }
